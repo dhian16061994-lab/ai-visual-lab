@@ -5,7 +5,7 @@ import { 
   Image as ImageIcon, ClipboardCopy, Wand2, MessageSquare, Zap
 } from 'lucide-react';
 
-const VideoAnalyzer = () => {
+const App = () => {
   const [mediaUrl, setMediaUrl] = useState('');
   const [mediaType, setMediaType] = useState('video'); // 'video' or 'image'
   const [inputUrl, setInputUrl] = useState('');
@@ -482,5 +482,4 @@ const VideoAnalyzer = () => {
     </div>
   );
 };
-
 export default App;
