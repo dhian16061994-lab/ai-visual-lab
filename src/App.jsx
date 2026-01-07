@@ -262,34 +262,22 @@ const App = () => {
     }
   };
 
-  const generateNewImage = async () => {
+  const copyFinalPrompt = () => {
     const completedScenes = scenes.filter(s => s.status === 'completed');
     if (completedScenes.length === 0) {
       setError("Butuh setidaknya satu analisa prompt yang selesai!");
       return;
     }
-    setIsGeneratingImage(true);
-    setGeneratedImageUrl('');
-    setImageProgress(0);
-    setError(null);
 
-    const progInterval = setInterval(() => {
-      setImageProgress(prev => (prev < 95 ? prev + 2 : prev));
-    }, 400);
-
+    // Mengambil prompt terakhir dan instruksi tambahan
     const basePrompt = completedScenes[completedScenes.length - 1].prompt;
     const finalPrompt = aiInstruction ? `${basePrompt}. Additional context: ${aiInstruction}` : basePrompt;
 
-    try {
-      const imageUrl = await callImagen(finalPrompt, imageResolution);
-      setGeneratedImageUrl(imageUrl);
-      setImageProgress(100);
-    } catch (err) {
-      setError(`Gagal Imagen: ${err.message}`);
-    } finally {
-      clearInterval(progInterval);
-      setIsGeneratingImage(false);
-    }
+    // Melakukan Copy ke Clipboard
+    navigator.clipboard.writeText(finalPrompt).then(() => {
+      setCopyStatus('master-prompt');
+      setTimeout(() => setCopyStatus(null), 2000);
+    });
   };
 
   const copyToClipboard = (text, id) => {
@@ -521,16 +509,24 @@ const App = () => {
                 </div>
                 
                 <button 
-                  onClick={generateNewImage}
-                  disabled={isGeneratingImage || scenes.length === 0}
-                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all overflow-hidden relative shadow-xl active:scale-95"
-                >
-                  <div className="flex items-center gap-2 z-10">
-                    {isGeneratingImage ? <Loader2 className="animate-spin" size={18} /> : <Zap size={18} className="text-yellow-400" />}
-                    <span>{isGeneratingImage ? `Melukis ${imageProgress}%` : 'Generate Gambar Baru ✨'}</span>
-                  </div>
-                  {isGeneratingImage && <div className="absolute left-0 top-0 h-full bg-white/10 transition-all duration-300" style={{ width: `${imageProgress}%` }} />}
-                </button>
+    onClick={copyFinalPrompt}
+    disabled={scenes.length === 0}
+    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-xl active:scale-95"
+  >
+    <div className="flex items-center gap-2 z-10">
+      {copyStatus === 'master-prompt' ? (
+        <>
+          <Check size={18} className="text-green-400" />
+          <span>Prompt Berhasil Di-copy!</span>
+        </>
+      ) : (
+        <>
+          <ClipboardCopy size={18} className="text-white" />
+          <span>Copy Master Prompt ✨</span>
+        </>
+      )}
+    </div>
+  </button>
               </div>
 
               {aiResponse && (
