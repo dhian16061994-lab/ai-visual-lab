@@ -484,5 +484,3 @@ const VideoAnalyzer = () => {
 };
 
 export default App;
-
-export default VideoAnalyzer;
