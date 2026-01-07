@@ -6,7 +6,7 @@ import {
   Clapperboard, Music, Layout, Maximize, Download
 } from 'lucide-react';
 
-const VideoAnalyzer = () => {
+const App = () => {
   const [mediaUrl, setMediaUrl] = useState('');
   const [mediaType, setMediaType] = useState('video'); // 'video' or 'image'
   const [scenes, setScenes] = useState([]);
@@ -26,7 +26,7 @@ const VideoAnalyzer = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const apiKey = "AIzaSyCqHZdoqeXAXjDI4wDrMredaJqNn4r950c"; // API key disediakan oleh environment.
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
   const callGemini = async (prompt, base64Image = null, retryCount = 0) => {
     const model = "gemini-2.5-flash-preview-09-2025";
