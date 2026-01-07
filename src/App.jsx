@@ -26,7 +26,7 @@ const App = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const apiKey = "AIzaSyCaARU1HUAkW1Jc8AlHFb4zFl6Rkb8mJ-c"; // API key disediakan oleh environment
+  const apiKey = AIzaSyCqHZdoqeXAXjDI4wDrMredaJqNn4r950c; // API key disediakan oleh environment
 
   // Fungsi pemanggil API Gemini dengan penanganan error & retry
   const callGemini = async (prompt, base64Image = null, retryCount = 0) => {
